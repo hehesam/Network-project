@@ -1,5 +1,5 @@
 import socket
-
+from data_maker import create
 HEADER = 64
 PORT = 65432
 FORMAT = 'utf-8'
@@ -22,9 +22,10 @@ def send(msg):
     client.send(message)
 
 
-
+    
 
 print("You can chat 3 times : ")
 for i in range(3):
+    send(create())
     send(input())
 send(DISCONNECT_MESSAGE)
