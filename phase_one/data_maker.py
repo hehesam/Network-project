@@ -1,9 +1,5 @@
-import socket
-
-
 import random
 from random import randint
-
 
 def create_name():
     first_name = ["Liam","Emma","Charlotte","Oliver","Elijah","James","Benjamin","Harper","Levi","Elizabeth","Daniel","Sofia","Mason","Logan","Layla","John","Joseph","Lily","Violet","Riley","Isaac","Stella","Victoria","Piper","Peyton","Sadie"]
@@ -15,46 +11,11 @@ def create_name():
 def create_na_id():
     res = str(randint(1200000000,1299999999))
     return res
-
 def create_st_id():
     res = str(randint(900000000,999999999))
     return res
-
 def score():
-    return str(randint(13, 20))
+    return randint(13, 20)
 
 def create():
-    res = create_na_id() + " " + create_st_id() + " " + create_name()  + " " + score()
-    return res
-
-
-HEADER = 64
-PORT = 65432
-FORMAT = 'utf-8'
-DISCONNECT_MESSAGE = "DISCONNECT!"
-SERVER = socket.gethostbyname(socket.gethostname())
-ADDR = (SERVER,PORT)
-
-client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-client.connect(ADDR)
-
-
-def send(msg):
-
-    message = msg.encode(FORMAT)
-    msg_length = len(message)
-    send_length = str(msg_length).encode(FORMAT)
-    send_length += b' '* (HEADER - len(send_length))
-
-    client.send(send_length)
-    client.send(message)
-
-
-
-
-print("You can chat 3 times : ")
-for i in range(3):
-    print(create())
-    send(create())
-    send(input())
-send(DISCONNECT_MESSAGE)
+    return create_na_id + " " + create_st_id + " " + create_name  + " " + score
