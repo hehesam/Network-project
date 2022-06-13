@@ -1,4 +1,5 @@
 import socket
+<<<<<<< HEAD
 
 
 import random
@@ -28,6 +29,9 @@ def create():
     return res
 
 
+=======
+from data_maker import create
+>>>>>>> 0fab17329a3050297772b18c84c980a952b92321
 HEADER = 64
 PORT = 65432
 FORMAT = 'utf-8'
@@ -50,11 +54,14 @@ def send(msg):
     client.send(message)
 
 
-
+    
 
 print("You can chat 3 times : ")
 for i in range(3):
+<<<<<<< HEAD
     print(create())
+=======
+>>>>>>> 0fab17329a3050297772b18c84c980a952b92321
     send(create())
     send(input())
 send(DISCONNECT_MESSAGE)
