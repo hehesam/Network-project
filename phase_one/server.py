@@ -1,5 +1,6 @@
 import socket
 import threading
+import subprocess
 import time
 HEADER = 64
 PORT = 65432
@@ -37,9 +38,13 @@ def handle_client(conn, addr):
 
 
 
-def start():
+def start(client_number):
     server.listen()
+
     print(f"[LISTENING] Server is listening on {SERVER}")
+    for j in range(client_number):
+        subprocess.call('start python client.py', shell=True)
+
     while True:
         conn, addr = server.accept()
         thread = threading.Thread(target=handle_client, args=(conn,addr))
@@ -48,4 +53,5 @@ def start():
         print(f"[ACTIVE CONNECTIONS] {threading.activeCount() - 1}")
 
 print("[STARING] sever is starting...")
-start()
+client_number = int(input("how many client ?"))
+start(client_number)
