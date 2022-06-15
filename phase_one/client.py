@@ -1,7 +1,7 @@
 import socket
 from data_maker import create
 HEADER = 64
-PORT = 65432
+PORT = 65430
 FORMAT = 'utf-8'
 DISCONNECT_MESSAGE = "DISCONNECT!"
 SERVER = socket.gethostbyname(socket.gethostname())
@@ -20,6 +20,7 @@ def send(msg):
 
     client.send(send_length)
     client.send(message)
+
 
 
     

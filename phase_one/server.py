@@ -42,8 +42,8 @@ def start(client_number):
     server.listen()
 
     print(f"[LISTENING] Server is listening on {SERVER}")
-    for j in range(client_number):
-        subprocess.call('start python client.py', shell=True)
+    # for j in range(client_number):
+    #     subprocess.call('start python client.py', shell=True)
 
     while True:
         conn, addr = server.accept()
