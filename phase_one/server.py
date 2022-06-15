@@ -3,7 +3,7 @@ import threading
 import subprocess
 import time
 HEADER = 64
-PORT = 65431
+PORT = 65432
 # SERVER =  "172.17.40.1" 
 # or 
 SERVER = socket.gethostbyname(socket.gethostname())
