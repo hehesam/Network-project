@@ -4,6 +4,7 @@ import csv
 from student_data import student
 HEADER = 1024
 PORT = 65430
+FILE_SIZE = 10
 DISCONNECT_MESSAGE = "DISCONNECT!"
 SEPARATOR = "<SEPARATOR>"
 
@@ -18,7 +19,7 @@ def send_string(msg):
 
 def send_string2():
     st = student()
-    for i in range(5):
+    for i in range(FILE_SIZE):
         res = ""
         st_data = [st.get_ID(), st.get_name(), st.get_score(), st.get_score(), st.get_score(), st.get_score(), st.get_score()]
         for data in st_data:
@@ -52,29 +53,40 @@ def send_csv(filename):
     print(filesize)
 
 while True:
-    print("end  send  server avg")
+    print("send , avg, sort, max, min,  server, end")
     command = input()
+    client.send(command.encode())
     if command == "send":
-        client.send("send".encode())
         send_string2()
 
     elif command == "avg":
-        client.send("avg".encode())
+        stat = client.recv(HEADER)
+        print(stat.decode())
 
     elif command == "sort":
-        client.send("sort".encode())
-        for i in range(5):
+        for i in range(FILE_SIZE+1):
             sort_id = client.recv(HEADER)
             print(sort_id.decode())
 
+    elif command == "max":
+        for i in range(2):
+            max_name = client.recv(HEADER)
+            print(max_name.decode())
 
     elif command == "server":
-        client.send("2".encode())
         server_message = client.recv(HEADER)
         print(server_message.decode())
 
+    elif command == "min":
+        for i in range(2):
+            min_name = client.recv(HEADER)
+            print(min_name.decode())
+
     elif command == "end":
-        client.send(DISCONNECT_MESSAGE.encode())
         print("byby")
         client.close()
         break
+
+
+    else :
+        print("command is wrong try again")
