@@ -7,7 +7,7 @@ BUFFER_SIZE = 4096 # send 4096 bytes each time step
 # the ip address or hostname of the server, the receiver
 host = socket.gethostbyname(socket.gethostname())
 # the port, let's use 5001
-port = 5001
+port = 5000
 # the name of file we want to send, make sure it exists
 with open("data.csv", 'w', newline='') as file :
     writer = csv.writer(file)
