@@ -50,16 +50,10 @@ def send_csv(filename):
     print(filesize)
 
 while True:
-    print("0 break 1 for csv 2 for message 3 listing to server")
+    print("0 break 1 for message 2 listing to server")
     command = int(input())
     if command == 1:
-        print("give csv file ")
         client.send("1".encode())
-        csv_name = input()+".csv"
-        send_csv(csv_name)
-
-    elif command == 2:
-        client.send("2".encode())
 
         while True :
             inp = input("enter your message: ")
@@ -67,12 +61,12 @@ while True:
                 break
             send_string2(inp)
 
-    elif command == 3:
-        client.send("3".encode())
+    elif command == 2:
+        client.send("2".encode())
         server_message = client.recv(HEADER)
         print(server_message.decode())
 
-    else :
+    else:
         client.send("0".encode())
         print("byby")
         client.close()

@@ -18,33 +18,26 @@ print(server)
 def handle_client(conn,addr):
     print(f"[NEW CONNECTION] {addr} connected.")
 
-    while True :
+    while True:
         command = conn.recv(HEADER).decode()
 
-        if command == '1':
-            print("data transfer")
-            received = conn.recv(HEADER).decode()
-            print("raw data: ", received)
-            filename, filesize, raw_data = received.split(SEPARATOR)
-            csv_row = raw_data.split("\r")
-            for row in csv_row:
-                row.replace("\n", "")
-                print(row)
 
-        elif command == '2':
+        if command == '1':
             print("messaging")
             connected = True
             while connected:
                 data = conn.recv(HEADER).decode()
-                if data == DISCONNECT_MESSAGE:
-                    break
                 print(data)
 
+                if data == DISCONNECT_MESSAGE:
+                    break
+                if data == "data":
+                    for i in range(7):
+                        st_data = conn.recv(HEADER).decode()
+                        print(st_data)
 
-
-        elif command == '3':
-            print("say hi")
-            conn.send(str.encode("hello client"))
+        elif command == '2':
+            conn.send(input("tell client: ").encode())
 
         elif command == '0':
             print("client disconnected")
