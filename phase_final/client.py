@@ -4,9 +4,9 @@ import csv
 import pandas as pd
 from IPython.display import display
 from student_data import student
-HEADER = 1024
+HEADER = 10240
 PORT = 65430
-FILE_SIZE = 10
+FILE_SIZE = 100
 DISCONNECT_MESSAGE = "DISCONNECT!"
 SEPARATOR = "<SEPARATOR>"
 
@@ -69,7 +69,7 @@ def send_csv(filename):
     print(filesize, "done !")
 
 while True:
-    print("send, sendcsv , avg, sort, max, min,  server, end")
+    print("<"*20,"[sendcsv , avg, sort, max, min, end]", 20*">")
     command = input()
     client.send(command.encode())
 

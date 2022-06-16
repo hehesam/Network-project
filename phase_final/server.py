@@ -7,9 +7,8 @@ import pandas as pd
 from IPython.display import display
 
 
-HEADER = 1024
+HEADER = 10240
 PORT = 65430
-FILE_SIZE = 10
 
 SERVER = socket.gethostbyname(socket.gethostname())
 ADDR = (SERVER, PORT)
@@ -19,10 +18,6 @@ SEPARATOR = "<SEPARATOR>"
 server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 server.bind(ADDR)
 print(server)
-
-
-
-
 
 
 def show_data(filename):
@@ -54,10 +49,12 @@ def max_data(df):
     max_name = df.iloc[-1]['name']
     return (max_name,max_avg)
 
+
 def min_data(df):
     min_avg = df.iloc[0]['AVG']
     min_name = df.iloc[0]['name']
     return (min_name,min_avg)
+
 
 def handle_client(conn,addr):
     print(f"[NEW CONNECTION] {addr} connected.")
@@ -67,7 +64,6 @@ def handle_client(conn,addr):
         print("send_csv , avg, sort, max, min, end")
         command = conn.recv(HEADER).decode()
         print("read command : ", command)
-        display(data_base)
         if command == 'sendcsv':
             filename = conn.recv(HEADER).decode()
             filesize = conn.recv(HEADER).decode()
