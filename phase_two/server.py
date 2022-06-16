@@ -1,12 +1,15 @@
 import socket
 import threading
 import subprocess
+import os
+import tqdm
 
 HEADER = 1024
-PORT = 65431
+PORT = 65430
 SERVER = socket.gethostbyname(socket.gethostname())
 ADDR = (SERVER, PORT)
 DISCONNECT_MESSAGE = "DISCONNECT!"
+SEPARATOR = "<SEPARATOR>"
 
 server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 server.bind(ADDR)
@@ -15,19 +18,47 @@ print(server)
 def handle_client(conn,addr):
     print(f"[NEW CONNECTION] {addr} connected.")
 
-    connected = True
-    while connected:
-        data = conn.recv(HEADER).decode()
-        if data == DISCONNECT_MESSAGE:
-            break
-        print(data)
-        conn.send(str.encode("hello client"))
-    conn.close()
+    while True :
+        command = conn.recv(HEADER).decode()
 
-def start():
+        if command == '1':
+            print("data transfer")
+            received = conn.recv(HEADER).decode()
+            print("raw data: ", received)
+            filename, filesize, raw_data = received.split(SEPARATOR)
+            csv_row = raw_data.split("\r")
+            for row in csv_row:
+                row.replace("\n", "")
+                print(row)
+
+        elif command == '2':
+            print("messaging")
+            connected = True
+            while connected:
+                data = conn.recv(HEADER).decode()
+                if data == DISCONNECT_MESSAGE:
+                    break
+                print(data)
+
+
+
+        elif command == '3':
+            print("say hi")
+            conn.send(str.encode("hello client"))
+
+        elif command == '0':
+            print("client disconnected")
+            conn.close()
+            break
+
+
+
+
+def start(client_number):
+
     server.listen()
-    # subprocess.call(["gnome-terminal" , "--" , "sh", "-c", "python3 client.py"])
-    # subprocess.call(["gnome-terminal" , "--" , "sh", "-c", "python3 client.py"])
+    # for i in range(client_number):
+    #     subprocess.call(["gnome-terminal" , "--" , "sh", "-c", "python3 client.py"])
 
     print(f"[LISTENING] Server is listening on {SERVER}")
 
@@ -39,4 +70,4 @@ def start():
         print(f"[ACTIVE CONNECTIONS] {threading.activeCount() - 1}")
 
 
-start()
+start(1)

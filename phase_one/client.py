@@ -51,10 +51,7 @@ def send(msg):
 
 
 
-<<<<<<< HEAD
-    
-=======
->>>>>>> a88c9fe8f53703b8626255c9e54daa40d169f8a4
+
 
 print("You can chat 3 times : ")
 for i in range(3):
