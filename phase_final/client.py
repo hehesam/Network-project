@@ -1,6 +1,8 @@
 import os.path
 import socket
 import csv
+import pandas as pd
+from IPython.display import display
 from student_data import student
 HEADER = 1024
 PORT = 65430
@@ -14,8 +16,7 @@ client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 client.connect(ADDR)
 
 
-def send_string(msg):
-    client.send(msg.encode())
+
 
 def send_string2():
     st = student()
@@ -26,6 +27,13 @@ def send_string2():
             res += data + "|"
         client.send(res.encode())
         print(res)
+
+
+def show_data(filename):
+    df = pd.read_csv(filename)
+    display(df)
+    return df
+
 
 def send_csv(filename):
     print("write your file")
@@ -64,35 +72,44 @@ while True:
     print("send, sendcsv , avg, sort, max, min,  server, end")
     command = input()
     client.send(command.encode())
-    if command == "send":
-        send_string2()
 
     if command == "sendcsv":
         file_name = input("enter the name of file example file.csv: ")
         send_csv(file_name)
 
     elif command == "avg":
-        stat = client.recv(HEADER)
-        print(stat.decode())
+        filename = client.recv(HEADER).decode()
+        filesize = client.recv(HEADER).decode()
+        print(filename, filesize)
+        new_filename = "se" + filename
+        f = open(new_filename, 'wb')
+        l = client.recv(int(filesize))
+        print("before loop: ", len(l))
+        f.write(l)
+        f.close()
+        show_data(new_filename)
 
     elif command == "sort":
-        for i in range(FILE_SIZE+1):
-            sort_id = client.recv(HEADER)
-            print(sort_id.decode())
+        filename = client.recv(HEADER).decode()
+        filesize = client.recv(HEADER).decode()
+        print(filename, filesize)
+        new_filename = "se" + filename
+        f = open(new_filename, 'wb')
+        l = client.recv(int(filesize))
+        print("before loop: ", len(l))
+        f.write(l)
+        f.close()
+        show_data(new_filename)
 
     elif command == "max":
-        for i in range(2):
-            max_name = client.recv(HEADER)
-            print(max_name.decode())
+        max_name = client.recv(HEADER)
+        print(max_name.decode())
 
-    elif command == "server":
-        server_message = client.recv(HEADER)
-        print(server_message.decode())
+
 
     elif command == "min":
-        for i in range(2):
-            min_name = client.recv(HEADER)
-            print(min_name.decode())
+        min_name = client.recv(HEADER)
+        print(min_name.decode())
 
     elif command == "end":
         print("byby")
