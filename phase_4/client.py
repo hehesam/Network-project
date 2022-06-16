@@ -61,6 +61,12 @@ while True:
     elif command == "avg":
         client.send("avg".encode())
 
+    elif command == "sort":
+        client.send("sort".encode())
+        for i in range(5):
+            sort_id = client.recv(HEADER)
+            print(sort_id.decode())
+
 
     elif command == "server":
         client.send("2".encode())

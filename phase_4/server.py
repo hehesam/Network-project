@@ -22,17 +22,24 @@ def avg(data_base):
         res = 0
         for i in range(2,len(st)):
             print(res, st[i])
-            st[i] = int[st[i]]
-            res += st[]
+            res += int(st[i])
         res = res/size
         st.append(res)
+
+def sort(data_base, sorted_score):
+    for st in data_base:
+        key = st[-1]
+        if key not in sorted_score:
+            sorted_score[key] = []
+        sorted_score[key].append((st[0],st[1]))
+    return sorted(sorted_score.keys())
 
 def handle_client(conn,addr):
     print(f"[NEW CONNECTION] {addr} connected.")
     data_base = []
-
+    sorted_scores = {}
     while True:
-        print("send , avg, server")
+        print("send , avg, server, sort")
         command = conn.recv(HEADER).decode()
         print("read command : ", command)
 
@@ -61,6 +68,13 @@ def handle_client(conn,addr):
             print(data_base)
             avg(data_base)
             print(data_base)
+
+        elif command == 'sort':
+            res = sort(data_base, sorted_scores)
+            for avg_score in res :
+                for id,name in sorted_scores[avg_score]:
+                    print(id,name)
+                    conn.send(id.encode())
 
         elif command == 'server':
             conn.send(input("tell client: ").encode())
