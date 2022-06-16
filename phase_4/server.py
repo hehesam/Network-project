@@ -2,7 +2,6 @@ import socket
 import threading
 import subprocess
 import os
-import tqdm
 
 HEADER = 1024
 PORT = 65430
@@ -52,6 +51,20 @@ def handle_client(conn,addr):
                 arr.pop(-1)
                 data_base.append(arr)
                 print(arr)
+        elif command == 'sendcsv':
+            filename = conn.recv(HEADER).decode()
+            filesize = conn.recv(HEADER).decode()
+            print(filename,filesize)
+            new_filename = "se"+filename
+            f = open(new_filename, 'wb')
+            l = conn.recv(int(filesize))
+            print("before loop: ", len(l))
+            f.write(l)
+
+            # while l:
+            #     l = conn.recv(HEADER)
+            #     print("copy in server")
+            f.close()
 
         elif command == 'avg':
             avg(data_base)
@@ -83,7 +96,7 @@ def handle_client(conn,addr):
         elif command == 'server':
             conn.send(input("tell client: ").encode())
 
-        elif command == 'end':
+        elif command == 'end' or command == '':
             print("client disconnected")
             conn.close()
             break

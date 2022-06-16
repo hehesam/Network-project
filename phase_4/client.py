@@ -29,6 +29,7 @@ def send_string2():
 
 def send_csv(filename):
     print("write your file")
+    client.send(filename.encode())
     st = student()
     with open(filename, 'w', newline='') as file:
         writer = csv.writer(file)
@@ -36,28 +37,38 @@ def send_csv(filename):
             writer.writerow([st.get_ID(),st.get_name(),st.get_score(), st.get_score(), st.get_score(), st.get_score(),st.get_score()])
 
     filesize = os.path.getsize(filename)
-    client.send(f"{filename}{SEPARATOR}{filesize}{SEPARATOR}".encode())
+    client.send(f"{filesize}".encode())
+    # with open(filename, 'rb') as f:
+    #     while True:
+    #         bytes_read = f.read(HEADER)
+    #         # print("bytes_read")
+    #         if not bytes_read:
+    #             print("out of loop")
+    #             break
+    #
+    #         client.sendall(bytes_read)
+    #         # client.send(bytes_read)
+    #         print("bytes_read")
 
-    with open(filename, 'rb') as f :
-        while True:
-            bytes_read = f.read(HEADER)
-            # print("bytes_read")
-            if not bytes_read:
-                print("out of loop")
-                break
+    f = open(filename, 'rb')
+    l = f.read(HEADER)
+    while l:
+        client.send(l)
+        l = f.read(HEADER)
+    f.close()
 
-            client.sendall(bytes_read)
-            # client.send(bytes_read)
-            print("bytes_read")
-
-    print(filesize)
+    print(filesize, "done !")
 
 while True:
-    print("send , avg, sort, max, min,  server, end")
+    print("send, sendcsv , avg, sort, max, min,  server, end")
     command = input()
     client.send(command.encode())
     if command == "send":
         send_string2()
+
+    if command == "sendcsv":
+        file_name = input("enter the name of file example file.csv: ")
+        send_csv(file_name)
 
     elif command == "avg":
         stat = client.recv(HEADER)
