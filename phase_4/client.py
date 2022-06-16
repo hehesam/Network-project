@@ -16,13 +16,15 @@ client.connect(ADDR)
 def send_string(msg):
     client.send(msg.encode())
 
-def send_string2(msg):
+def send_string2():
     st = student()
-    client.send(msg.encode())
-    st_data = [st.get_ID(), st.get_name(), st.get_score(), st.get_score(), st.get_score(), st.get_score(), st.get_score()]
-    for data in st_data:
-        print(type(data), data)
-        client.send(data.encode())
+    for i in range(5):
+        res = ""
+        st_data = [st.get_ID(), st.get_name(), st.get_score(), st.get_score(), st.get_score(), st.get_score(), st.get_score()]
+        for data in st_data:
+            res += data + "|"
+        client.send(res.encode())
+        print(res)
 
 def send_csv(filename):
     print("write your file")
@@ -50,24 +52,23 @@ def send_csv(filename):
     print(filesize)
 
 while True:
-    print("0 break 1 for message 2 listing to server")
-    command = int(input())
-    if command == 1:
-        client.send("1".encode())
+    print("end  send  server avg")
+    command = input()
+    if command == "send":
+        client.send("send".encode())
+        send_string2()
 
-        while True :
-            inp = input("enter your message: ")
-            if inp == "break":
-                break
-            send_string2(inp)
+    elif command == "avg":
+        client.send("avg".encode())
 
-    elif command == 2:
+
+    elif command == "server":
         client.send("2".encode())
         server_message = client.recv(HEADER)
         print(server_message.decode())
 
-    else:
-        client.send("0".encode())
+    elif command == "end":
+        client.send(DISCONNECT_MESSAGE.encode())
         print("byby")
         client.close()
         break

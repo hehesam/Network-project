@@ -2,7 +2,7 @@ import socket
 import tqdm
 import os
 # device's IP address
-SERVER_HOST = "0.0.0.0"
+SERVER_HOST = socket.gethostbyname(socket.gethostname())
 SERVER_PORT = 5001
 # receive 4096 bytes each time
 BUFFER_SIZE = 4096
@@ -49,6 +49,7 @@ with open(filename, "wb") as f:
         # write to the file the bytes we just received
         f.write(bytes_read)
         # update the progress bar
+        print(bytes_read)
         progress.update(len(bytes_read))
 
 # close the client socket

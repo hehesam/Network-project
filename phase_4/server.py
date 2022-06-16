@@ -15,31 +15,57 @@ server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 server.bind(ADDR)
 print(server)
 
+def avg(data_base):
+    for st in data_base:
+        print(st)
+        size = len(st)-2
+        res = 0
+        for i in range(2,len(st)):
+            print(res, st[i])
+            st[i] = int[st[i]]
+            res += st[]
+        res = res/size
+        st.append(res)
+
 def handle_client(conn,addr):
     print(f"[NEW CONNECTION] {addr} connected.")
+    data_base = []
 
     while True:
+        print("send , avg, server")
         command = conn.recv(HEADER).decode()
+        print("read command : ", command)
 
+        if command == 'send':
+            for i in range(5):
+                st_data = conn.recv(HEADER).decode()
+                arr = st_data.split("|")
+                arr.pop(-1)
+                data_base.append(arr)
+                print(arr)
+            #
+            # print("messaging")
+            # connected = True
+            # while connected:
+            #     print("break or get data")
+            #     data = conn.recv(HEADER).decode()
+            #     print(data)
+            #     if data == "break":
+            #         print("break: ")
+            #         connected = False
+            #         break
+            #     elif data == "data":
+            #         print("data is : ")
 
-        if command == '1':
-            print("messaging")
-            connected = True
-            while connected:
-                data = conn.recv(HEADER).decode()
-                print(data)
+        elif command == 'avg':
+            print(data_base)
+            avg(data_base)
+            print(data_base)
 
-                if data == DISCONNECT_MESSAGE:
-                    break
-                if data == "data":
-                    for i in range(7):
-                        st_data = conn.recv(HEADER).decode()
-                        print(st_data)
-
-        elif command == '2':
+        elif command == 'server':
             conn.send(input("tell client: ").encode())
 
-        elif command == '0':
+        else:
             print("client disconnected")
             conn.close()
             break
